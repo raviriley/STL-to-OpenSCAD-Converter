@@ -158,7 +158,7 @@ function saveResult(vertices, triangles) {
 
 
   window.URL = window.URL || window.webkitURL;
-  prompt("scad", result);
+  //prompt("Copy scad:", result); //prompt result in a copyable field
   var blob = new Blob([result], {
     type: 'text/plain'
   });
