@@ -202,33 +202,32 @@ function handleFileSelect(evt) {
   progress.style.width = '0%';
   progress.textContent = '0%';
   
-  var extension = String(evt).match(/\.[0-9a-z]+$/i);
-  console.log(extension);
-  console.log(evt);
-  console.log(evt.target.baseURI);
-  //if
-  
-  reader = new FileReader();
-  reader.onerror = errorHandler;
-  reader.onprogress = updateProgress;
-  reader.onabort = function(e) {
-    alert('File read cancelled');
-  };
-  reader.onloadstart = function(e) {
-    document.getElementById('progress_bar').className = 'loading';
-  };
+  var filename = evt.target.files[0].name;
+  var extension = String(filename.match(/\.[0-9a-z]+$/i));
+  if (extension == ".stl") {
+    reader = new FileReader();
+    reader.onerror = errorHandler;
+    reader.onprogress = updateProgress;
+    reader.onabort = function(e) {
+      alert('File read cancelled');
+    };
+    reader.onloadstart = function(e) {
+      document.getElementById('progress_bar').className = 'loading';
+    };
 
-  reader.onload = function(e) {
-    // Ensure that the progress bar displays 100% at the end.
-    progress.style.width = '100%';
-    progress.textContent = '100%';
-    setTimeout("document.getElementById('progress_bar').className='';", 2000);
-    parseResult(reader.result);
+    reader.onload = function(e) {
+      // Ensure that the progress bar displays 100% at the end.
+      progress.style.width = '100%';
+      progress.textContent = '100%';
+      setTimeout("document.getElementById('progress_bar').className='';", 2000);
+      parseResult(reader.result);
   }
 
   // Read in the stl file as a binary string.
   reader.readAsBinaryString(evt.target.files[0]);
-  //}endif?
+  }
+  else
+	  error();
 }
 
 function abortRead() {
