@@ -201,7 +201,7 @@ function updateProgress(evt) {
 
 
 function handleFileSelect(evt) {
-  document.getElementById("cancel").style.display = "";
+  //document.getElementById("cancel").style.display = "";
   // Reset progress indicator on new file selection.
   progress.style.width = '0%';
   progress.textContent = '0%';
