@@ -23,6 +23,7 @@ function _reset() {
   totalObjects = 0;
   document.getElementById('error').innerText = '';
   document.getElementById('conversion').innerText = '';
+  document.getElementById("download").style.display = "none"
 }
 
 //stl: the stl file context as a string
@@ -142,6 +143,7 @@ function parseAsciiResult(stl) {
 function error(err) {
   document.getElementById('error').innerText = "An Error has occured while trying to convert your file!\r\nPlease make sure this is a valid STL file.";
   document.getElementById('conversion').innerText = '';
+  document.getElementById("download").style.display = "none";
 }
 //Input: Set of vertices and triangles, both are strings
 //Makes the Download link create an OpenScad file with a polyhedron object that represents the parsed stl file
@@ -163,10 +165,11 @@ function saveResult(vertices, triangles) {
     type: 'text/plain'
   });
 
-  $('a').attr("href", window.URL.createObjectURL(blob));
-  $('a').attr("download", "FromSTL.SCAD");
+  $("#download").attr("href", window.URL.createObjectURL(blob));
+  $("#download").attr("download", "FromSTL.scad");
 
-  document.getElementById('conversion').innerText = 'Conversion complete - Click the download link to download your OpenSCAD file! Total Triangles: ' + triangles.length;
+  document.getElementById("conversion").innerText = "Conversion complete - Click the button below to download your OpenSCAD file! Total Triangles: " + triangles.length;
+  document.getElementById("download").style.display = "";
 }
 
 function errorHandler(evt) {
@@ -198,6 +201,7 @@ function updateProgress(evt) {
 
 
 function handleFileSelect(evt) {
+  document.getElementById("cancel").style.display = "";
   // Reset progress indicator on new file selection.
   progress.style.width = '0%';
   progress.textContent = '0%';
@@ -234,4 +238,4 @@ function abortRead() {
   reader.abort();
 }
 
-document.getElementById('files').addEventListener('change', handleFileSelect, false);
+document.getElementById("upload").addEventListener('change', handleFileSelect, false);
