@@ -207,7 +207,7 @@ function handleFileSelect(evt) {
   
   var filename = evt.target.files[0].name;
   var extension = String(filename.match(/\.[0-9a-z]+$/i));
-  if (extension == ".stl") {
+  if (extension.toLowerCase() == ".stl") {
     reader = new FileReader();
     reader.onerror = errorHandler;
     reader.onprogress = updateProgress;
