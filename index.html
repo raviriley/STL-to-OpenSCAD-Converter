@@ -8,21 +8,28 @@
   <script src="js/binaryReader.js"></script>
 </head>
 <body>
-<p>
-Convert STL files to OpenSCAD. Read more about it here: 
-<a href='https://www.thingiverse.com/thing:1383325' target=_new>Thingiverse: STL to OpenSCAD converter</a>
-</p>
-<div><span id="error"></span></div>
-<div><input type="file" id="files" name="file" accept=".stl"/></div>
-<button onclick="abortRead();">Cancel read</button>
-<div id="progress_bar">
-    <div class="percent">0%</div>
-</div>
-<span id="conversion"></span>
-<span id="result"></span>
-<div>
-<a href="#" class="button">Download</a>
-</div>
-<script src="js/main.js"></script>
+	<h1>STL to OpenSCAD File Converter</h1>
+	<p>Convert STL files to OpenSCAD. Read more about it here: 
+	<a href="https://www.thingiverse.com/thing:1383325">Thingiverse: STL to OpenSCAD converter</a>
+	</p>
+	
+	<div><span id="error"></span></div>
+	<input type="file" id="upload" name="file" accept=".stl">
+	<label for="upload" class="button">Choose File</label>
+	<button id="cancel" class="button" onclick="abortRead();" style="display:none">Cancel</button>
+
+	<div id="progress_bar">
+		<div class="percent">0%</div>
+	</div>
+	<span id="conversion"></span>
+	<span id="result"></span>
+	
+	<div>
+		<a href="#" id="download" class="button" style="display: none">Download</a>
+	</div>
+	<footer>
+		<p>view it on GitHub</p>
+	</footer>
+	<script src="js/main.js"></script>
 </body>
 </html>
