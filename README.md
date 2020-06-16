@@ -1,8 +1,6 @@
-# STL to OpenSCAD Converter (work in progress)
+# STL to OpenSCAD Converter
 
 This tool allows you to convert .STLs to .SCADs with ease.
-
-need to add css styling to make it look better
  
 based on
 
