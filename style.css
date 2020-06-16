@@ -28,7 +28,6 @@ p {
 }
 
 /*   Buttons   */
-
 .button {
   border: none;
   border-radius: 5px;
@@ -64,11 +63,34 @@ p {
 
 #cancel {background-color: #7c7f7c;}
 #cancel:hover {background-color: #af504c;}
-
 /*   End Buttons   */
 
+/*   Footer   */
 footer {
-  position: absolute;
-  bottom: 0;
-  /*height: 2.5rem;*/
+	position: absolute;
+	right: 15px;
+	bottom: 0;
 }
+
+.badge {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+}
+.badge img {
+  width: 100%;
+  height: auto;
+}
+.badge #btn {
+  position: absolute;
+  top: 50%;
+  left: 80%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  background-color: Transparent;
+  background-repeat:no-repeat;
+  border: none;
+  overflow: hidden;
+  outline:none;
+}
+/*   End Footer   */
