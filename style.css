@@ -27,8 +27,9 @@ p {
     width: 0;
 }
 
+/*   Buttons   */
+
 .button {
-  background-color: #4CAF50;
   border: none;
   border-radius: 5px;
   color: white;
@@ -40,6 +41,34 @@ p {
   margin: 4px 2px;
   cursor: pointer;
 }
-.button:hover {
-  background-color: #3e8e41;
+
+#upload {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+#upload + label {
+	background-color: #4CAF50;
+}
+#upload:focus + label,
+#upload + label:hover {
+    background-color: #3E8E41;
+}
+
+#download {background-color: #4CAF50;}
+#download:hover {background-color: #3E8E41;}
+
+#cancel {background-color: #7c7f7c;}
+#cancel:hover {background-color: #af504c;}
+
+/*   End Buttons   */
+
+footer {
+  position: absolute;
+  bottom: 0;
+  /*height: 2.5rem;*/
 }
