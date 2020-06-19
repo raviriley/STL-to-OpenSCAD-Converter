@@ -9,8 +9,7 @@ http://jsfiddle.net/roha/353r2k8w/embedded/result/
 From:
 https://www.thingiverse.com/thing:1383325
 
-Added file verification, styling, fixed typos, updated jquery version, included all references properly, optimized code, removed deprecated references
-
+Added file verification, styling, fixed typos, updated jquery, included all references properly, optimized code, removed deprecated references
 
 Thingiverse use case:
 
