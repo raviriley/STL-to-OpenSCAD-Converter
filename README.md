@@ -2,7 +2,7 @@
 
 This tool allows you to convert .STLs to .SCADs with ease.
  
-I based this on [STL to OpenSCAD Converter](http://jsfiddle.net/roha/353r2k8w/embedded/result/) from https://www.thingiverse.com/thing:1383325 but it had a lot of issues, so I added file verification, styling, fixed typos, updated dependencies, included all the references properly, fixed the errors, optimized the code, and removed deprecated code. 
+I based this on [STL to OpenSCAD Converter](http://jsfiddle.net/roha/353r2k8w/embedded/result/) from https://www.thingiverse.com/thing:1383325 but it had a lot of issues, so I added file verification, styling, fixed typos, updated dependencies, included all the references properly, fixed the errors, and removed deprecated code. 
 
 #### Thingiverse use case:
 
