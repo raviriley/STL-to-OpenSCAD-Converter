@@ -1,9 +1,3 @@
-body {
-    font-family: Helvetica, Verdana
-}
-p {
-    padding: 7px 10px;
-}
 #error {
     color: red;
 }
@@ -32,12 +26,15 @@ p {
   border: none;
   border-radius: 5px;
   color: white;
-  padding: 15px 32px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-right: 30px;
+  padding-left: 30px;
+  margin-right: 6px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 24px;
-  margin: 4px 2px;
   cursor: pointer;
 }
 
@@ -64,33 +61,3 @@ p {
 #cancel {background-color: #7c7f7c;}
 #cancel:hover {background-color: #af504c;}
 /*   End Buttons   */
-
-/*   Footer   */
-footer {
-	position: absolute;
-	right: 15px;
-	bottom: 0;
-}
-
-.badge {
-  position: relative;
-  width: 100%;
-  max-width: 400px;
-}
-.badge img {
-  width: 100%;
-  height: auto;
-}
-.badge #btn {
-  position: absolute;
-  top: 50%;
-  left: 80%;
-  transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  background-color: Transparent;
-  background-repeat:no-repeat;
-  border: none;
-  overflow: hidden;
-  outline:none;
-}
-/*   End Footer   */

@@ -1,27 +1,46 @@
 <!DOCTYPE html>
 <html>
 <!-- based on http://jsfiddle.net/roha/353r2k8w/ -->
-<head>
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-58161369-2"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
 
-    gtag('config', 'UA-58161369-2');
-  </script>
-  <!-- End Google Analytics -->
-  <title>STL to OpenSCAD Converter</title>
-  <link rel="stylesheet" type="text/css" href="style.css">  
-  <script src="js/jquery-1.12.4.js"></script>
-  <script src="js/binaryReader.js"></script>
+<head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-58161369-2"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+
+		gtag('config', 'UA-58161369-2');
+	</script>
+	<!-- End Google Analytics -->
+	<title>STL to OpenSCAD Converter</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script src="js/jquery-1.12.4.js"></script>
+	<script src="js/binaryReader.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
+
 <body>
-	<h1>STL to OpenSCAD File Converter</h1>
-	<p>This tool allows you to convert .STLs to .SCADs with ease. See it on GitHub at the banner below or read more about it here: <a href="https://www.thingiverse.com/thing:4461877">Thingiverse: STL to OpenSCAD Converter</a>
+	<h1>STL → OpenSCAD File Converter</h1>
+	<p>This tool allows you to convert .STLs to .SCADs with ease.</p>
+	<details>
+		<summary>Thingiverse use case</summary>
+		<p>
+			In OpenSCAD you can use <code>import(example.stl)</code> to import an STL. However, Thingiverse Customizer
+			doesn't support the <code>import</code> command, and it requires that everything resides in one
+			<code>.scad</code> file. With this tool, you can convert all your STLs to OpenSCAD modules, copy and paste
+			each module into one big SCAD file, and call the module instead of using <code>import()</code>.
+			<br>
+			This is how I created the
+			<a href="https://www.thingiverse.com/thing:4311414">3DVerkstan Faceshield Stacker Customizer</a>.
+		</p>
+	</details>
+	<p>
+		If you find this useful please <a href="https://github.com/raviriley/STL-to-OpenSCAD-Converter">star it on
+			GitHub</a> or give it a like on <a href="https://www.thingiverse.com/thing:4461877">Thingiverse</a> :)
 	</p>
-	
+	<hr style="margin-bottom: 2%;">
 	<div><span id="error"></span></div>
 	<input type="file" id="upload" name="file" accept=".stl">
 	<label for="upload" class="button">Choose File</label>
@@ -32,22 +51,12 @@
 	</div>
 	<p id="conversion"></p>
 	<span id="result"></span>
-	
+
 	<div>
 		<a href="#" id="download" class="button" style="display: none">Download</a>
 	</div>
-	
-	<footer>
-		<p class="badge">
-			<a href="https://github.com/raviriley/STL-to-OpenSCAD-Converter"><img src="https://gh-card.dev/repos/raviriley/STL-to-OpenSCAD-Converter.svg" style="width:100%"></a>
-			<button id="btn">
-				<a class="github-button" href="https://github.com/raviriley/STL-to-OpenSCAD-Converter" data-icon="octicon-star" data-size="large" aria-label="Star raviriley/STL-to-OpenSCAD-Converter on GitHub">Star</a>
-				<br>
-				<a class="github-button" href="https://github.com/raviriley/STL-to-OpenSCAD-Converter/archive/master.zip" data-icon="octicon-download" data-size="large" aria-label="Download raviriley/STL-to-OpenSCAD-Converter on GitHub">Download</a>
-			</button>
-		</p>
-	</footer>
 	<script src="js/main.js"></script>
-	<script async defer src="https://buttons.github.io/buttons.js"></script>
+
 </body>
+
 </html>
