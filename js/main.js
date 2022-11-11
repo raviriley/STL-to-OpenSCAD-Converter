@@ -148,8 +148,19 @@ function error(err) {
 //Input: Set of vertices and triangles, both are strings
 //Makes the Download link create an OpenScad file with a polyhedron object that represents the parsed stl file
 function saveResult(vertices, triangles) {
+  // this function groups an array 'a' in groups of 'n'
+  const regroup = (a, n) => [...Array(Math.ceil(a.length / n))]
+    .map((item, i) => a.slice(i*n, (i+1)*n));
 
-  var poly = 'polyhedron(\r\n points=[' + vertices + ' ],\r\nfaces=[' + triangles + ']);';
+  // creates the group of 3 of both arrays
+  var verticesGroup = regroup(vertices, 3);
+  var trianglesGroup = regroup(triangles, 3);
+
+  // each line will be composed by three coordinates followed by the comma and the crlf
+  var verticesString = verticesGroup.map(g => g.join(',')).join(',\r\n');
+  var trianglesString = trianglesGroup.map(g => g.join(',')).join(',\r\n');
+
+  var poly = 'polyhedron(\r\n points=[' + verticesString + ' ],\r\nfaces=[' + trianglesString + ']);';
 
   calls = calls + 'object' + (++totalObjects) + '(1);\r\n\r\n';
 
