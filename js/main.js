@@ -8,6 +8,7 @@ var vertices = [];
 var triangles = [];
 var modules = '';
 var calls = '';
+var functions = '';
 var vertexIndex = 0;
 var converted = 0;
 var totalObjects = 0;
@@ -18,6 +19,7 @@ function _reset() {
   triangles = [];
   modules = '';
   calls = '';
+  functions = '';
   vertexIndex = 0;
   converted = 0;
   totalObjects = 0;
@@ -116,8 +118,9 @@ function parseBinaryResult(stl) {
     }
   }
 
-  var bounds = `[${minx},${miny},${minz}], [${maxx},${maxy},${maxz}]`;
-  saveResult(vertices, triangles, bounds);
+  var boundsMin = `[${minx},${miny},${minz}]`;
+  var boundsMax = `[${maxx},${maxy},${maxz}]`;
+  saveResult(vertices, triangles, boundsMin, boundsMax);
 }
 
 function parseAsciiResult(stl) {
@@ -191,8 +194,9 @@ function parseAsciiResult(stl) {
       }
     }
 
-    var bounds = `[${minx},${miny},${minz}], [${maxx},${maxy},${maxz}]`;
-    saveResult(vertices, triangles, bounds);
+    var boundsMin = `[${minx},${miny},${minz}]`;
+    var boundsMax = `[${maxx},${maxy},${maxz}]`;
+    saveResult(vertices, triangles, boundsMin, boundsMax);
   }
 }
 
@@ -203,7 +207,7 @@ function error(err) {
 }
 //Input: Set of vertices and triangles, both are strings
 //Makes the Download link create an OpenScad file with a polyhedron object that represents the parsed stl file
-function saveResult(vertices, triangles, bounds) {
+function saveResult(vertices, triangles, boundsMin, boundsMax) {
   // this function groups an array 'a' in groups of 'n'
   const regroup = (a, n) => [...Array(Math.ceil(a.length / n))]
     .map((item, i) => a.slice(i*n, (i+1)*n));
@@ -218,13 +222,19 @@ function saveResult(vertices, triangles, bounds) {
 
   var poly = 'polyhedron(\r\n points=[' + verticesString + ' ],\r\nfaces=[' + trianglesString + ']);';
 
-  calls = calls + 'object' + (++totalObjects) + '(1);\r\n\r\n';
+  var objectName = `object${++totalObjects}`;
+  var functionMin = `${objectName}Min()`;
+  var functionMax = `${objectName}Max()`;
+
+  functions = functions + `function ${functionMin} = ${boundsMin};\r\n`;
+  functions = functions + `function ${functionMax} = ${boundsMax};\r\n\r\n`;
 
   modules = modules + 'module object' + totalObjects + '(scale) {';
   modules = modules + poly + '}\r\n\r\n';
+  
+  calls = calls + objectName + '(1);\r\n\r\n';
 
-  result = modules + calls;
-
+  result = modules + functions + calls;
 
   window.URL = window.URL || window.webkitURL;
   //prompt("Copy scad:", result); //prompt result in a copyable field
@@ -235,7 +245,7 @@ function saveResult(vertices, triangles, bounds) {
   $("#download").attr("href", window.URL.createObjectURL(blob));
   $("#download").attr("download", "FromSTL.scad");
 
-  document.getElementById("bounds").innerText = "Bounds: " + bounds;
+  document.getElementById("bounds").innerText = "Bounds: " + boundsMin + ", " + boundsMax;
   document.getElementById("conversion").innerText = "Conversion complete - Click the button below to download your OpenSCAD file! Total Triangles: " + triangles.length;
   document.getElementById("download").style.display = "";
 }
