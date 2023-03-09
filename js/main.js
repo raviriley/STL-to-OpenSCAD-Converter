@@ -118,8 +118,8 @@ function parseBinaryResult(stl) {
     }
   }
 
-  var boundsMin = `[${minx},${miny},${minz}]`;
-  var boundsMax = `[${maxx},${maxy},${maxz}]`;
+  var boundsMin = `[${minx.toFixed(2)},${miny.toFixed(2)},${minz.toFixed(2)}]`;
+  var boundsMax = `[${maxx.toFixed(2)},${maxy.toFixed(2)},${maxz.toFixed(2)}]`;
   saveResult(vertices, triangles, boundsMin, boundsMax);
 }
 
@@ -194,8 +194,8 @@ function parseAsciiResult(stl) {
       }
     }
 
-    var boundsMin = `[${minx},${miny},${minz}]`;
-    var boundsMax = `[${maxx},${maxy},${maxz}]`;
+    var boundsMin = `[${minx.toFixed(2)},${miny.toFixed(2)},${minz.toFixed(2)}]`;
+    var boundsMax = `[${maxx.toFixed(2)},${maxy.toFixed(2)},${maxz.toFixed(2)}]`;
     saveResult(vertices, triangles, boundsMin, boundsMax);
   }
 }
