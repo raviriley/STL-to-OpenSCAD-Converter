@@ -245,8 +245,9 @@ function saveResult(vertices, triangles, boundsMin, boundsMax) {
   $("#download").attr("href", window.URL.createObjectURL(blob));
   $("#download").attr("download", "FromSTL.scad");
 
+  document.getElementById("conversion").innerText = "Conversion complete. Click the button below to download your OpenSCAD file!";
+  document.getElementById("triangles").innerText = "Total Triangles: " + triangles.length;
   document.getElementById("bounds").innerText = "Bounds: " + boundsMin + ", " + boundsMax;
-  document.getElementById("conversion").innerText = "Conversion complete - Click the button below to download your OpenSCAD file! Total Triangles: " + triangles.length;
   document.getElementById("download").style.display = "";
 }
 
