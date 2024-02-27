@@ -8,6 +8,7 @@ var vertices = [];
 var triangles = [];
 var modules = '';
 var calls = '';
+var functions = '';
 var vertexIndex = 0;
 var converted = 0;
 var totalObjects = 0;
@@ -18,6 +19,7 @@ function _reset() {
   triangles = [];
   modules = '';
   calls = '';
+  functions = '';
   vertexIndex = 0;
   converted = 0;
   totalObjects = 0;
@@ -53,6 +55,12 @@ function parseBinaryResult(stl) {
   br.seek(80); //Skip header
   var totalTriangles = br.readUInt32(); //Read # triangles
 
+  var minx = Number.MAX_VALUE;
+  var miny = Number.MAX_VALUE;
+  var minz = Number.MAX_VALUE;
+  var maxx = Number.MIN_VALUE;
+  var maxy = Number.MIN_VALUE;
+  var maxz = Number.MIN_VALUE;
   for (var tr = 0; tr < totalTriangles; tr++) {
     try {
       document.getElementById('conversion').innerText = 'In Progress - Converted ' + (++converted) + ' out of ' + totalTriangles + ' triangles!';
@@ -67,9 +75,32 @@ function parseBinaryResult(stl) {
       br.readFloat();
       br.readFloat(); //SKIP NORMAL
       //Parse every 3 subsequent floats as a vertex
-      var v1 = '[' + br.readFloat() + ',' + br.readFloat() + ',' + br.readFloat() + ']';
-      var v2 = '[' + br.readFloat() + ',' + br.readFloat() + ',' + br.readFloat() + ']';
-      var v3 = '[' + br.readFloat() + ',' + br.readFloat() + ',' + br.readFloat() + ']';
+
+      var x1, y1, z1;
+      var x2, y2, z2;
+      var x3, y3, z3;
+      x1 = br.readFloat();
+      y1 = br.readFloat();
+      z1 = br.readFloat();
+      
+      x2 = br.readFloat();
+      y2 = br.readFloat();
+      z2 = br.readFloat();
+      
+      x3 = br.readFloat();
+      y3 = br.readFloat();
+      z3 = br.readFloat();
+
+      minx = Math.min(minx, x1, x2, x3);
+      maxx = Math.max(maxx, x1, x2, x3);
+      miny = Math.min(miny, y1, y2, y3);
+      maxy = Math.max(maxy, y1, y2, y3);
+      minz = Math.min(minz, z1, z2, z3);
+      maxz = Math.max(maxz, z1, z2, z3);
+            
+      var v1 = '[' + x1 + ',' + y1 + ',' + z1 + ']';
+      var v2 = '[' + x2 + ',' + y2 + ',' + z2 + ']';
+      var v3 = '[' + x3 + ',' + y3 + ',' + z3 + ']';
       //every 3 vertices create a triangle.
       var triangle = '[' + (vertexIndex++) + ',' + (vertexIndex++) + ',' + (vertexIndex++) + ']';
 
@@ -87,7 +118,9 @@ function parseBinaryResult(stl) {
     }
   }
 
-  saveResult(vertices, triangles);
+  var boundsMin = `[${minx.toFixed(3)}, ${miny.toFixed(3)}, ${minz.toFixed(3)}]`;
+  var boundsMax = `[${maxx.toFixed(3)}, ${maxy.toFixed(3)}, ${maxz.toFixed(3)}]`;
+  saveResult(vertices, triangles, boundsMin, boundsMax);
 }
 
 function parseAsciiResult(stl) {
@@ -104,6 +137,12 @@ function parseAsciiResult(stl) {
     match = objects[o].match(patt);
     if (match == null) continue;
 
+    var minx = Number.MAX_VALUE;
+    var miny = Number.MAX_VALUE;
+    var minz = Number.MAX_VALUE;
+    var maxx = Number.MIN_VALUE;
+    var maxy = Number.MIN_VALUE;
+    var maxz = Number.MIN_VALUE;
     for (var i = 0; i < match.length; i++) {
       try {
         document.getElementById('conversion').innerText = 'In Progress - Object ' + (o + 1) + ' out of ' + objects.length + ' Converted ' + (++converted) + ' out of ' + match.length + ' facets!';
@@ -119,6 +158,25 @@ function parseAsciiResult(stl) {
           break;
         }
 
+        var a1, a2, a3;
+        a1 = parseFloat(v[1]);
+        a2 = parseFloat(v[4]);
+        a3 = parseFloat(v[7]);
+        minx = Math.min(minx, a1, a2, a3);
+        maxx = Math.max(maxx, a1, a2, a3);
+
+        a1 = parseFloat(v[2]);
+        a2 = parseFloat(v[5]);
+        a3 = parseFloat(v[8]);
+        miny = Math.min(miny, a1, a2, a3);
+        maxy = Math.max(maxy, a1, a2, a3);
+
+        a1 = parseFloat(v[3]);
+        a2 = parseFloat(v[6]);
+        a3 = parseFloat(v[9]);
+        minz = Math.min(minz, a1, a2, a3);
+        maxz = Math.max(maxz, a1, a2, a3);
+        
         var v1 = '[' + v[1] + ',' + v[2] + ',' + v[3] + ']';
         var v2 = '[' + v[4] + ',' + v[5] + ',' + v[6] + ']';
         var v3 = '[' + v[7] + ',' + v[8] + ',' + v[9] + ']';
@@ -136,7 +194,9 @@ function parseAsciiResult(stl) {
       }
     }
 
-    saveResult(vertices, triangles);
+    var boundsMin = `[${minx.toFixed(3)}, ${miny.toFixed(3)}, ${minz.toFixed(3)}]`;
+    var boundsMax = `[${maxx.toFixed(3)}, ${maxy.toFixed(3)}, ${maxz.toFixed(3)}]`;
+    saveResult(vertices, triangles, boundsMin, boundsMax);
   }
 }
 
@@ -147,17 +207,34 @@ function error(err) {
 }
 //Input: Set of vertices and triangles, both are strings
 //Makes the Download link create an OpenScad file with a polyhedron object that represents the parsed stl file
-function saveResult(vertices, triangles) {
+function saveResult(vertices, triangles, boundsMin, boundsMax) {
+  // this function groups an array 'a' in groups of 'n'
+  const regroup = (a, n) => [...Array(Math.ceil(a.length / n))]
+    .map((item, i) => a.slice(i*n, (i+1)*n));
 
-  var poly = 'polyhedron(\r\n points=[' + vertices + ' ],\r\nfaces=[' + triangles + ']);';
+  // creates the group of 3 of both arrays
+  var verticesGroup = regroup(vertices, 3);
+  var trianglesGroup = regroup(triangles, 3);
 
-  calls = calls + 'object' + (++totalObjects) + '(1);\r\n\r\n';
+  // each line will be composed by three coordinates followed by the comma and the crlf
+  var verticesString = verticesGroup.map(g => g.join(',')).join(',\r\n');
+  var trianglesString = trianglesGroup.map(g => g.join(',')).join(',\r\n');
+
+  var poly = 'polyhedron(\r\n points=[' + verticesString + ' ],\r\nfaces=[' + trianglesString + ']);';
+
+  var objectName = `object${++totalObjects}`;
+  var functionMin = `${objectName}Min()`;
+  var functionMax = `${objectName}Max()`;
+
+  functions = functions + `function ${functionMin} = ${boundsMin};\r\n`;
+  functions = functions + `function ${functionMax} = ${boundsMax};\r\n\r\n`;
 
   modules = modules + 'module object' + totalObjects + '(scale) {';
   modules = modules + poly + '}\r\n\r\n';
+  
+  calls = calls + objectName + '(1);\r\n\r\n';
 
-  result = modules + calls;
-
+  result = modules + functions + calls;
 
   window.URL = window.URL || window.webkitURL;
   //prompt("Copy scad:", result); //prompt result in a copyable field
@@ -168,7 +245,9 @@ function saveResult(vertices, triangles) {
   $("#download").attr("href", window.URL.createObjectURL(blob));
   $("#download").attr("download", "FromSTL.scad");
 
-  document.getElementById("conversion").innerText = "Conversion complete - Click the button below to download your OpenSCAD file! Total Triangles: " + triangles.length;
+  document.getElementById("conversion").innerText = "Conversion complete. Click the button below to download your OpenSCAD file!";
+  document.getElementById("triangles").innerText = "Total Triangles: " + triangles.length;
+  document.getElementById("bounds").innerText = "Bounds: " + boundsMin + ", " + boundsMax;
   document.getElementById("download").style.display = "";
 }
 
