@@ -42,9 +42,12 @@
 	</p>
 	<hr style="margin-bottom: 2%;">
 	<div><span id="error"></span></div>
-	<input type="file" id="upload" name="file" accept=".stl">
+	<input type="file" id="upload" name="file" accept=".stl"/>
 	<label for="upload" class="button">Choose File</label>
 	<button id="cancel" class="button" onclick="abortRead();">Cancel</button>
+	<br>
+	<br>
+	<input type="checkbox" id="flip-surface" name="flip-surface">Flip Surface Orientation</input>
 	<div id="progress_bar">
 		<div class="percent">0%</div>
 	</div>
