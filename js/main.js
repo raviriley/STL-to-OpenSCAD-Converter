@@ -304,7 +304,7 @@ function handleFileSelect(evt) {
       progress.textContent = '100%';
       setTimeout("document.getElementById('progress_bar').className='';", 2000);
       fileName = nextFileName.slice(0, -4);
-      document.getElementById('fileName').textContent = fileName;    
+      document.getElementById('fileName').textContent = " " + fileName + ".scad";    
       parseResult(reader.result);
   }
 
