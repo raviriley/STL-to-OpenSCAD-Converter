@@ -286,8 +286,8 @@ function handleFileSelect(evt) {
   progress.style.width = '0%';
   progress.textContent = '0%';
   
-  filename = evt.target.files[0].name;
-  var extension = String(filename.match(/\.[0-9a-z]+$/i));
+  var nextFileName = evt.target.files[0].name;
+  var extension = String(nextFileName.match(/\.[0-9a-z]+$/i));
   if (extension.toLowerCase() == ".stl") {
     reader = new FileReader();
     reader.onerror = errorHandler;
@@ -305,6 +305,7 @@ function handleFileSelect(evt) {
       progress.textContent = '100%';
       setTimeout("document.getElementById('progress_bar').className='';", 2000);
       parseResult(reader.result);
+      fileName = nextFileName;
   }
 
   // Read in the stl file as a binary string.
