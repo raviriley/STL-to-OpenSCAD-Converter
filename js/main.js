@@ -13,6 +13,7 @@ var vertexIndex = 0;
 var converted = 0;
 var totalObjects = 0;
 var convertedObjects = 0;
+var fileName = '';
 
 function _reset() {
   vertices = [];
@@ -23,6 +24,7 @@ function _reset() {
   vertexIndex = 0;
   converted = 0;
   totalObjects = 0;
+  fileName = '';
   document.getElementById('error').innerText = '';
   document.getElementById('conversion').innerText = '';
   document.getElementById("download").style.display = "none"
@@ -243,7 +245,7 @@ function saveResult(vertices, triangles, boundsMin, boundsMax) {
   });
 
   $("#download").attr("href", window.URL.createObjectURL(blob));
-  $("#download").attr("download", "FromSTL.scad");
+  $("#download").attr("download", fileName + ".scad");
 
   document.getElementById("conversion").innerText = "Conversion complete. Click the button below to download your OpenSCAD file!";
   document.getElementById("triangles").innerText = "Total Triangles: " + triangles.length;
@@ -284,7 +286,7 @@ function handleFileSelect(evt) {
   progress.style.width = '0%';
   progress.textContent = '0%';
   
-  var filename = evt.target.files[0].name;
+  filename = evt.target.files[0].name;
   var extension = String(filename.match(/\.[0-9a-z]+$/i));
   if (extension.toLowerCase() == ".stl") {
     reader = new FileReader();
