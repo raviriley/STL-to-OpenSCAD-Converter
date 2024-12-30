@@ -24,7 +24,6 @@ function _reset() {
   vertexIndex = 0;
   converted = 0;
   totalObjects = 0;
-  fileName = '';
   document.getElementById('error').innerText = '';
   document.getElementById('conversion').innerText = '';
   document.getElementById("download").style.display = "none"
@@ -304,8 +303,8 @@ function handleFileSelect(evt) {
       progress.style.width = '100%';
       progress.textContent = '100%';
       setTimeout("document.getElementById('progress_bar').className='';", 2000);
-      parseResult(reader.result);
       fileName = nextFileName;
+      parseResult(reader.result);
   }
 
   // Read in the stl file as a binary string.
