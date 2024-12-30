@@ -303,7 +303,8 @@ function handleFileSelect(evt) {
       progress.style.width = '100%';
       progress.textContent = '100%';
       setTimeout("document.getElementById('progress_bar').className='';", 2000);
-      fileName = nextFileName;
+      fileName = nextFileName.slice(0, -4);
+      document.getElementById('fileName').textContent = fileName;    
       parseResult(reader.result);
   }
 
