@@ -15,6 +15,8 @@ var totalObjects = 0;
 var convertedObjects = 0;
 var fileName = '';
 
+var dic_points = new Array(); //points
+
 function _reset() {
   vertices = [];
   triangles = [];
@@ -24,9 +26,29 @@ function _reset() {
   vertexIndex = 0;
   converted = 0;
   totalObjects = 0;
+  dic_points = new Array();
   document.getElementById('error').innerText = '';
   document.getElementById('conversion').innerText = '';
   document.getElementById("download").style.display = "none"
+}
+
+//check if point is exists,
+//if exist, return index
+//else push it, return index
+
+function locate_or_push(v){
+    var idx=-1
+
+    if ( v in dic_points) {
+        idx = dic_points[v]
+    }
+    else{
+
+        dic_points[v] = vertexIndex;
+        idx = vertexIndex;
+        vertexIndex ++;
+    }
+    return idx;
 }
 
 //stl: the stl file context as a string
@@ -102,21 +124,34 @@ function parseBinaryResult(stl) {
       var v1 = '[' + x1 + ',' + y1 + ',' + z1 + ']';
       var v2 = '[' + x2 + ',' + y2 + ',' + z2 + ']';
       var v3 = '[' + x3 + ',' + y3 + ',' + z3 + ']';
+
+
+      //OPTIMIZE: Check if the vertex is already in the array, if it is just reuse the index
+      vx1 = locate_or_push(v1)
+      vx2 = locate_or_push(v2)
+      vx3 = locate_or_push(v3)
       //every 3 vertices create a triangle.
-      var triangle = '[' + (vertexIndex++) + ',' + (vertexIndex++) + ',' + (vertexIndex++) + ']';
+      //var triangle = '[' + (vertexIndex++) + ',' + (vertexIndex++) + ',' + (vertexIndex++) + ']';
+      var triangle = '[' + vx1 + ',' + vx2 + ',' + vx3 + ']';
 
       br.readUInt16();
       //Add 3 vertices for every triangle
 
       //TODO: OPTIMIZE: Check if the vertex is already in the array, if it is just reuse the index
-      vertices.push(v1);
-      vertices.push(v2);
-      vertices.push(v3);
+      //vertices.push(v1);
+      //vertices.push(v2);
+      //vertices.push(v3);
       triangles.push(triangle);
     } catch (err) {
       error(err);
       return;
     }
+  }
+
+  var vertices_dic = Object.keys(dic_points).sort(function(a,b){ return dic_points[a]-dic_points[b]; });
+  for(var key in vertices_dic){
+        //console.log(key)
+      vertices.push(vertices_dic[key])
   }
 
   var boundsMin = `[${minx.toFixed(3)}, ${miny.toFixed(3)}, ${minz.toFixed(3)}]`;
@@ -129,6 +164,7 @@ function parseAsciiResult(stl) {
   //Find all models
   var objects = stl.split('endsolid');
 
+  alert("parseAsciiResult")
   for (var o = 0; o < objects.length; o++) {
 
     //Translation: a non-greedy regex for loop {...} endloop pattern 
@@ -181,18 +217,32 @@ function parseAsciiResult(stl) {
         var v1 = '[' + v[1] + ',' + v[2] + ',' + v[3] + ']';
         var v2 = '[' + v[4] + ',' + v[5] + ',' + v[6] + ']';
         var v3 = '[' + v[7] + ',' + v[8] + ',' + v[9] + ']';
-        var triangle = '[' + (vertexIndex++) + ',' + (vertexIndex++) + ',' + (vertexIndex++) + ']';
+
+        var vx1 = locate_or_push(v1)
+        var vx2 = locate_or_push(v2)
+        var vx3 = locate_or_push(v3)
+        //every 3 vertices create a triangle.
+        //var triangle = '[' + (vertexIndex++) + ',' + (vertexIndex++) + ',' + (vertexIndex++) + ']';
+        var triangle = '[' + vx1 + ',' + vx2 + ',' + vx3 + ']';
+
+        //var triangle = '[' + (vertexIndex++) + ',' + (vertexIndex++) + ',' + (vertexIndex++) + ']';
         //Add 3 vertices for every triangle
 
         //TODO: OPTIMIZE: Check if the vertex is already in the array, if it is just reuse the index
-        vertices.push(v1);
-        vertices.push(v2);
-        vertices.push(v3);
+        //vertices.push(v1);
+        //vertices.push(v2);
+        //vertices.push(v3);
         triangles.push(triangle);
       } catch (err) {
         error(err);
         return;
       }
+    }
+
+    var vertices_dic = Object.keys(dic_points).sort(function(a,b){ return dic_points[a]-dic_points[b]; });
+    for(var key in vertices_dic){
+        //console.log(key)
+        vertices.push(vertices_dic[key])
     }
 
     var boundsMin = `[${minx.toFixed(3)}, ${miny.toFixed(3)}, ${minz.toFixed(3)}]`;
