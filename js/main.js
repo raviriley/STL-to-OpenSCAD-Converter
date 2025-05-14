@@ -135,7 +135,7 @@ function parseAsciiResult(stl) {
     var patt = /\bloop[\s\S]*?\endloop/mgi;
     var result = 'matches are: ';
     converted = 0;
-    match = objects[o].match(patt);
+    var match = objects[o].match(patt);
     if (match == null) continue;
 
     var minx = Number.MAX_VALUE;
@@ -235,7 +235,7 @@ function saveResult(vertices, triangles, boundsMin, boundsMax) {
   
   calls = calls + objectName + '(1);\r\n\r\n';
 
-  result = modules + functions + calls;
+  var result = modules + functions + calls;
 
   window.URL = window.URL || window.webkitURL;
   //prompt("Copy scad:", result); //prompt result in a copyable field
@@ -306,13 +306,13 @@ function handleFileSelect(evt) {
       fileName = nextFileName.slice(0, -4);
       document.getElementById('fileName').textContent = " " + fileName + ".scad";    
       parseResult(reader.result);
-  }
+    }
 
-  // Read in the stl file as a binary string.
-  reader.readAsBinaryString(evt.target.files[0]);
+    // Read in the stl file as a binary string.
+    reader.readAsBinaryString(evt.target.files[0]);
+  } else {
+    error();
   }
-  else
-	  error();
 }
 
 function abortRead() {
