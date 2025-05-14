@@ -52,6 +52,7 @@ function parseResult(stl) {
 
 function parseBinaryResult(stl) {
   //This makes more sense if you read http://en.wikipedia.org/wiki/STL_(file_format)#Binary_STL
+  var invertFaces = document.getElementById('flip-surface').checked;
   var br = new BinaryReader(stl);
   br.seek(80); //Skip header
   var totalTriangles = br.readUInt32(); //Read # triangles
@@ -109,9 +110,11 @@ function parseBinaryResult(stl) {
       //Add 3 vertices for every triangle
 
       //TODO: OPTIMIZE: Check if the vertex is already in the array, if it is just reuse the index
-      vertices.push(v1);
-      vertices.push(v2);
-      vertices.push(v3);
+      if (!invertFaces) {
+        vertices.push(v1, v2, v3);
+      } else {
+        vertices.push(v1, v3, v2);
+      }
       triangles.push(triangle);
     } catch (err) {
       error(err);
@@ -125,6 +128,7 @@ function parseBinaryResult(stl) {
 }
 
 function parseAsciiResult(stl) {
+  var invertFaces = document.getElementById('flip-surface').checked;
 
   //Find all models
   var objects = stl.split('endsolid');
@@ -185,9 +189,11 @@ function parseAsciiResult(stl) {
         //Add 3 vertices for every triangle
 
         //TODO: OPTIMIZE: Check if the vertex is already in the array, if it is just reuse the index
-        vertices.push(v1);
-        vertices.push(v2);
-        vertices.push(v3);
+        if (!invertFaces) {
+          vertices.push(v1, v2, v3);
+        } else {
+          vertices.push(v1, v3, v2);
+        }
         triangles.push(triangle);
       } catch (err) {
         error(err);
